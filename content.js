@@ -72,31 +72,27 @@ class ImmersiveTranslator {
     this.hideTranslationButton();
 
     const button = document.createElement('div');
-    button.className = 'immersive-translator translate-button';
+    button.className = 'immersive-translator translate-button pulse-animation';
     button.innerHTML = '🌐 翻译';
-    button.style.cssText = `
-      position: absolute;
-      left: ${x}px;
-      top: ${y - 40}px;
-      background: #4285f4;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      cursor: pointer;
-      z-index: 10000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      user-select: none;
-    `;
+    button.style.left = `${x}px`;
+    button.style.top = `${y - 40}px`;
 
     button.addEventListener('click', (e) => {
       e.stopPropagation();
+      button.classList.add('loading');
       this.translateText(text);
       this.hideTranslationButton();
     });
 
     document.body.appendChild(button);
     this.translationButton = button;
+
+    // 移除脉冲动画
+    setTimeout(() => {
+      if (button.classList) {
+        button.classList.remove('pulse-animation');
+      }
+    }, 2000);
   }
 
   // 隐藏翻译按钮
@@ -109,7 +105,7 @@ class ImmersiveTranslator {
 
   // 翻译文本
   async translateText(text) {
-    this.showTranslationBox(text, '翻译中...');
+    this.showTranslationBox(text, '', true);
 
     try {
       const response = await new Promise((resolve) => {
@@ -121,12 +117,13 @@ class ImmersiveTranslator {
       });
 
       if (response.success) {
-        this.showTranslationBox(text, response.translation);
+        this.showTranslationBox(text, response.translation, false);
+        this.showSuccessIndicator();
       } else {
-        this.showTranslationBox(text, '翻译失败: ' + response.error);
+        this.showTranslationBox(text, '翻译失败: ' + response.error, false);
       }
     } catch (error) {
-      this.showTranslationBox(text, '翻译失败，请稍后重试');
+      this.showTranslationBox(text, '翻译失败，请稍后重试', false);
     }
   }
 
@@ -136,32 +133,16 @@ class ImmersiveTranslator {
 
     const box = document.createElement('div');
     box.className = 'immersive-translator translation-box';
-    box.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 300px;
-      max-height: 400px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      z-index: 10001;
-      display: none;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    `;
 
     box.innerHTML = `
-      <div style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; border-radius: 8px 8px 0 0;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 600; color: #333;">沉浸式翻译</span>
-          <button class="close-btn" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #666;">×</button>
-        </div>
+      <div class="header">
+        <span class="header-title">沉浸式翻译</span>
+        <button class="close-btn">×</button>
       </div>
-      <div class="original-text" style="padding: 12px; border-bottom: 1px solid #eee; background: #fff8e1; font-size: 14px; color: #333;"></div>
-      <div class="translated-text" style="padding: 12px; font-size: 14px; color: #333; line-height: 1.5;"></div>
-      <div style="padding: 8px 12px; border-top: 1px solid #eee; background: #f8f9fa; border-radius: 0 0 8px 8px;">
-        <button class="copy-btn" style="background: #4285f4; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">复制翻译</button>
+      <div class="original-text"></div>
+      <div class="translated-text"></div>
+      <div class="action-buttons">
+        <button class="copy-btn">复制翻译</button>
       </div>
     `;
 
@@ -187,20 +168,54 @@ class ImmersiveTranslator {
   }
 
   // 显示翻译框
-  showTranslationBox(originalText, translatedText) {
+  showTranslationBox(originalText, translatedText, isLoading = false) {
     if (!this.translationBox) {
       this.createTranslationBox();
     }
 
     this.translationBox.querySelector('.original-text').textContent = originalText;
-    this.translationBox.querySelector('.translated-text').textContent = translatedText;
-    this.translationBox.style.display = 'block';
+    
+    if (isLoading) {
+      this.translationBox.classList.add('loading');
+      this.translationBox.querySelector('.translated-text').innerHTML = 
+        '<div class="immersive-translator loading-spinner"></div>翻译中...';
+    } else {
+      this.translationBox.classList.remove('loading');
+      this.translationBox.querySelector('.translated-text').textContent = translatedText;
+    }
+    
+    this.translationBox.classList.add('show');
+  }
+
+  // 显示成功指示器
+  showSuccessIndicator() {
+    if (this.translationBox) {
+      const indicator = document.createElement('div');
+      indicator.className = 'immersive-translator success-indicator';
+      indicator.innerHTML = '✓';
+      
+      this.translationBox.style.position = 'relative';
+      this.translationBox.appendChild(indicator);
+      
+      setTimeout(() => {
+        if (indicator.parentNode) {
+          indicator.remove();
+        }
+      }, 2000);
+    }
   }
 
   // 隐藏翻译框
   hideTranslationBox() {
-    if (this.translationBox) {
-      this.translationBox.style.display = 'none';
+    if (this.translationBox && this.translationBox.classList.contains('show')) {
+      this.translationBox.classList.add('hide');
+      this.translationBox.classList.remove('show');
+      
+      setTimeout(() => {
+        if (this.translationBox) {
+          this.translationBox.classList.remove('hide');
+        }
+      }, 200);
     }
   }
 }

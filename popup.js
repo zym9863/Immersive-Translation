@@ -87,15 +87,32 @@ document.addEventListener('DOMContentLoaded', function() {
   testButton.textContent = '测试翻译';
   testButton.style.cssText = `
     width: 100%;
-    padding: 8px;
-    background: #4285f4;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 12px;
     cursor: pointer;
-    margin-top: 8px;
+    margin-top: 12px;
     font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.3);
   `;
+  
+  testButton.addEventListener('mouseenter', function() {
+    this.style.background = 'linear-gradient(135deg, #5a67d8, #6b46c1)';
+    this.style.transform = 'translateY(-1px)';
+    this.style.boxShadow = '0 4px 12px rgba(102,126,234,0.4)';
+  });
+  
+  testButton.addEventListener('mouseleave', function() {
+    this.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+    this.style.transform = 'translateY(0)';
+    this.style.boxShadow = '0 2px 8px rgba(102,126,234,0.3)';
+  });
+  
   testButton.addEventListener('click', testTranslation);
 
   // 将测试按钮添加到第一个section中
