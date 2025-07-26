@@ -1,0 +1,136 @@
+/* 沉浸式翻译插件样式 */
+
+/* 翻译按钮样式 */
+.immersive-translator.translate-button {
+  position: absolute !important;
+  background: #4285f4 !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  z-index: 10000 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  user-select: none !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.immersive-translator.translate-button:hover {
+  background: #3367d6 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+
+/* 翻译框样式 */
+.immersive-translator.translation-box {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  width: 300px !important;
+  max-height: 400px !important;
+  background: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+  z-index: 10001 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  overflow: hidden !important;
+}
+
+.immersive-translator.translation-box .original-text {
+  padding: 12px !important;
+  border-bottom: 1px solid #eee !important;
+  background: #fff8e1 !important;
+  font-size: 14px !important;
+  color: #333 !important;
+  line-height: 1.4 !important;
+  max-height: 100px !important;
+  overflow-y: auto !important;
+}
+
+.immersive-translator.translation-box .translated-text {
+  padding: 12px !important;
+  font-size: 14px !important;
+  color: #333 !important;
+  line-height: 1.5 !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  background: white !important;
+}
+
+/* 按钮样式 */
+.immersive-translator.translation-box .close-btn {
+  background: none !important;
+  border: none !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  color: #666 !important;
+  padding: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.immersive-translator.translation-box .close-btn:hover {
+  background: #f0f0f0 !important;
+}
+
+.immersive-translator.translation-box .copy-btn {
+  background: #4285f4 !important;
+  color: white !important;
+  border: none !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.immersive-translator.translation-box .copy-btn:hover {
+  background: #3367d6 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .immersive-translator.translation-box {
+    width: calc(100vw - 40px) !important;
+    max-width: 300px !important;
+    right: 20px !important;
+  }
+}
+
+/* 防止与网站样式冲突 */
+.immersive-translator * {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 滚动条样式 */
+.immersive-translator.translation-box .original-text::-webkit-scrollbar,
+.immersive-translator.translation-box .translated-text::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.immersive-translator.translation-box .original-text::-webkit-scrollbar-track,
+.immersive-translator.translation-box .translated-text::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 3px !important;
+}
+
+.immersive-translator.translation-box .original-text::-webkit-scrollbar-thumb,
+.immersive-translator.translation-box .translated-text::-webkit-scrollbar-thumb {
+  background: #c1c1c1 !important;
+  border-radius: 3px !important;
+}
+
+.immersive-translator.translation-box .original-text::-webkit-scrollbar-thumb:hover,
+.immersive-translator.translation-box .translated-text::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8 !important;
+}
