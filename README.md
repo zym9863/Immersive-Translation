@@ -1,5 +1,7 @@
 # 沉浸式翻译插件
 
+中文版 | [English](README_EN.md)
+
 基于 Pollinations AI 的浏览器扩展，提供无缝的网页文本翻译体验。
 
 ## 功能特点
