@@ -29,17 +29,27 @@ class ImmersiveTranslator {
     document.addEventListener('mouseup', (e) => {
       if (!this.isEnabled) return;
 
-      const selectedText = window.getSelection().toString().trim();
-      if (selectedText && selectedText.length > 0) {
-        this.showTranslationButton(e.pageX, e.pageY, selectedText);
-      } else {
-        this.hideTranslationButton();
-      }
+      // 延迟检查选中文本，确保选择完成
+      setTimeout(() => {
+        const selectedText = window.getSelection().toString().trim();
+        if (selectedText && selectedText.length > 0) {
+          // 获取选中文本的位置
+          const selection = window.getSelection();
+          if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            // 按钮显示在选中文本的右上角
+            this.showTranslationButton(rect.right + window.scrollX, rect.top + window.scrollY, selectedText);
+          }
+        } else {
+          this.hideTranslationButton();
+        }
+      }, 100);
     });
 
-    // 监听键盘快捷键 (Ctrl+T)
+    // 监听键盘快捷键 (Alt+T)
     document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 't' && !e.shiftKey && !e.altKey) {
+      if (e.altKey && e.key === 't' && !e.ctrlKey && !e.shiftKey) {
         e.preventDefault();
         const selectedText = window.getSelection().toString().trim();
         if (selectedText) {
